@@ -1,7 +1,7 @@
 # programme 1 page 38
 # ce programme vise à convertir en radians un angle fourni au départ en degrés, minutes, secondes
 
-degre, minute, seconde, pi = 68, 18, 44, 3.141592653     # déclaration des variables
+degre, minute, seconde, pi = 10, 0, 0, 3.141592653     # déclaration des variables
 
 # conversion des minutes et secondes en degrés
 fsec = seconde / 60
