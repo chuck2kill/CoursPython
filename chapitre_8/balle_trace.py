@@ -13,11 +13,12 @@ from math import *
 # définition des fonctions
 def avance():                                           # fonction qui permet de faire avancer la balle
     global x, y, r, t
-    px, py = x, y
+    px, py = x, y                                       # on enregistre x et y
+    t += 0.1
     x = cx + (r * cos(t))
     y = cy + (r * sin(t))
-    t += 0.1
-    can.coords(balle, x - 20, y - 20, x + 20, y + 20)   # on applique les nouvelles coordonnées de la balle
+    
+    can.coords(balle, x - 10, y - 10, x + 10, y + 10)   # on applique les nouvelles coordonnées de la balle
     can.create_line(px, py, x, y, fill='red')
 
 # ----- Programme principal -----
@@ -31,10 +32,12 @@ can = Canvas(fen, width=500, height=500, bg='blue')
 can.grid(row=0, column=0)
 
 # déclaration des variables globales
-x, y, r, t = 300, 200, 100, 0.
+x, y, r, t = 250, 200, 50, 0.
 cx, cy = x, y + r
 # création de la balle
-balle = can.create_oval(x - 20, y - 20, x + 20, y + 20, fill='red')
+x = cx + (r * cos(t))
+y = cy + (r * sin(t))
+balle = can.create_oval(x - 10, y - 10, x + 10, y + 10, fill='red')
 
 # initialisation des boutons
 Button(fen, text='Quitter', command=fen.quit).grid(row=1)
