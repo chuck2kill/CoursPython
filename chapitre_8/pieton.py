@@ -16,7 +16,7 @@ def switch():
     # on échange les emplacements des coordonnées rouge et vert
     x = [x[1], x[0], x[3], x[2]]
     y = [y[1], y[0], y[3], y[2]]
-    # on applique les changlements
+    # on applique les changements
     can.coords(feu1, x[0] - 15, y[0] - 15, x[0] + 15, y[0] + 15)
     can.coords(feu2, x[1] - 10, y[1] - 10, x[1] + 10, y[1] + 10)
     can.coords(feu3, x[2] - 15, y[2] - 15, x[2] + 15, y[2] + 15)
