@@ -29,7 +29,7 @@ fen = Tk()
 fen.title('Passage piéton')
 
 # déclaration de variables
-px, py = 110, 125
+px, py = 110, 125               # coordonnées du premier triangle jaune(passage piéton)
 x = [80, 420,420, 80 ]          # listes avec les coordonnées
 y = [105, 105, 395, 395]        # des feux tricolores
 
@@ -37,9 +37,11 @@ y = [105, 105, 395, 395]        # des feux tricolores
 can = Canvas(fen, width=500, height=500, bg='white')
 can.grid(row=0, column=0, columnspan=2)
 route = can.create_rectangle(100, 0, 400, 500, fill='grey')
+# boucle de création du passage piéton
 while px < 400:
     can.create_rectangle(px, py, px+40, py+250, fill='yellow')
     px += 60
+# création des 4 feux tricolores
 feu1 = can.create_oval(x[0] - 15, y[0] - 15, x[0] + 15, y[0] + 15, fill='red')
 feu2 = can.create_oval(x[1] - 10, y[1] - 10, x[1] + 10, y[1] + 10, fill='green')
 feu3 = can.create_oval(x[2] - 15, y[2] - 15, x[2] + 15, y[2] + 15, fill='red')
