@@ -1,25 +1,16 @@
 from tkinter import *
 from random import *
+from math import *
 
 # définition des gestionnaires
 # d'événements :
 
 def move():
     "déplacement de la balle"
-    global x1, y1, dx, dy, flag
-    x1, y1 = x1 + dx, y1 + dy
-    if x1 > 210:
-        x1, dx, dy = 210, randrange(-10, -1), 15
-        can1.itemconfigure(oval1, fill='blue')
-    if y1 > 210:
-        y1, dx, dy = 210, -15, randrange(-10, -1)
-        can1.itemconfigure(oval1, fill='green')
-    if x1 < 10:
-        x1, dx, dy = 10, randrange(1, 10), -15
-        can1.itemconfigure(oval1, fill='yellow')
-    if y1 < 10:
-        y1, dx, dy = 10, 15, randrange(1, 10)
-        can1.itemconfigure(oval1, fill='red')
+    global x1, y1, t, x, y, r, flag
+    t += 0.1
+    x1, y1 = x + (r * cos(t)), y + (r * sin(t))
+    
     can1.coords(oval1, x1, y1, x1 + 30, y1 + 30)
     if flag > 0:
         fen1.after(50, move)        # => boucler, après 50 milisecondes
@@ -39,9 +30,11 @@ def start_it():
 #========== Programme prinsipal ==========
 
 # les variables suivantes seront utilisées de manière globale :
-x1, y1 = 10, 10                     # coordonnées initiales
-dx, dy = 15, randrange(0, 10)       # 'pas' du déplacement
-flag = 0                            # commutateur
+                    # coordonnées initiales
+x, y = 125, 125
+t, r = 0, 50       # 'pas' du déplacement
+x1, y1 = x + (r * cos(t)), y + (sin(t))
+flag = 0
 
 # création du widget principal ("parent") :
 fen1 = Tk()
