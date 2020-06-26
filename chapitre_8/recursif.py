@@ -9,12 +9,16 @@ def move():
     x1, y1 = x1 + dx, y1 + dy
     if x1 > 210:
         x1, dx, dy = 210, 0, 15
+        can1.itemconfigure(oval1, fill='blue')
     if y1 > 210:
         y1, dx, dy = 210, -15, 0
+        can1.itemconfigure(oval1, fill='green')
     if x1 < 10:
         x1, dx, dy = 10, 0, -15
+        can1.itemconfigure(oval1, fill='yellow')
     if y1 < 10:
         y1, dx, dy = 10, 15, 0
+        can1.itemconfigure(oval1, fill='red')
     can1.coords(oval1, x1, y1, x1 + 30, y1 + 30)
     if flag > 0:
         fen1.after(50, move)        # => boucler, après 50 milisecondes
