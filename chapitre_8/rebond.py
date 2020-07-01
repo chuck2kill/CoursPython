@@ -11,10 +11,11 @@ from tkinter import *
 def move():
     "déplacement de la balle"
     global x, y, yh, v, dx, flag
-    yh += 20
+    
     v += dx                     # augmentation de la vitesse v
     y += v                      # on ajoute la vitesse v au point y
     if y > 400:
+        dx += .1
         y = 400
         v = -v
     

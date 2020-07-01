@@ -17,7 +17,6 @@ def avance():                                           # fonction qui permet de
     t += 0.1
     x = cx + (r * cos(t))
     y = cy + (r * sin(t))
-    
     can.coords(balle, x - 10, y - 10, x + 10, y + 10)   # on applique les nouvelles coordonnées de la balle
     can.create_line(px, py, x, y, fill='red')
 
