@@ -9,6 +9,7 @@ from tkinter import *
 
 # définition de fonction
 def move():
+    "déplacement de la balle"
     global x, y, yh, v, dx, flag
     yh += 20
     v += dx                     # augmentation de la vitesse v
@@ -22,12 +23,14 @@ def move():
         fen.after(50, move)
 
 def start():
+    "Démarrage de l'action"
     global flag
     flag += 1
     if flag == 1:
         move()
 
 def stop():
+    "Arrêt de l'action"
     global flag
     flag = 0
 
