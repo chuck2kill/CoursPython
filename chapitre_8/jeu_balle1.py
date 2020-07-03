@@ -12,6 +12,7 @@ from random import *
 
 # définition des fonctions
 def move():
+    "fonction qui permet le déplacement de la balle"
     global x, y, xMax, yMax, flag, dx, dy, v
     y += dy
     x += dx
@@ -34,16 +35,19 @@ def move():
         fen.after(v, move)
 
 def start():
+    "fonction de démarrage du mouvement de la balle"
     global flag
     flag += 1
     if flag == 1:
         move()
 
 def stop():
+    "fonction d'arrêt de la balle"
     global flag
     flag = 0
 
 def compte(event):
+    "fonction de gestion du clic"
     global clic, score, v
     clic += 1
     if event.x < x + 20 and event.x > x - 20 and event.y < y + 20 and event.y > y - 20:
@@ -51,10 +55,10 @@ def compte(event):
         v -= 15
     if clic >= 10:
         stop()
-        scoreF = Label(fen, text='score = ' + str(score), width=50)
+        scoreF = Label(fen, text='score = ' + str(score), font=50)
         scoreF.grid(row=0, column=0)
 
-#========== Programme prinscipal ==========
+#========== Programme principal ==========
 fen = Tk()
 fen.title('Clique la balle 1.0')
 
