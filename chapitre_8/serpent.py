@@ -17,10 +17,9 @@ def stop_it():
 
 def new_ball():
     "Apparation d'une nouvelle balle"
-    global canX, canY, cc, can
+    global canX, canY, cc, can, ballX, ballY, flag, balle
     ballX, ballY = randrange(0, canX), randrange(0, canY)
-    can.create_rectangle(ballX, ballY, ballX + cc, ballY + cc, fill='yellow')
-    
+    balle = can.create_oval(ballX, ballY, ballX + cc, ballY + cc, fill='yellow')
 
 def go_left(event =None):
     "Déplacement vers la gauche"
@@ -41,6 +40,18 @@ def go_down(event =None):
     "Déplacement vers le bas"
     global dx, dy
     dx, dy = 0, 1
+
+def serpent():
+    "Création du serpent"
+    global x, y, cc, serp
+    i = 0
+    while i < len(serp):
+        carre = can.create_rectangle(x, y, x + cc, y + cc, fill="green")
+        # Pour chaque carré, on mémorise une petite sous-liste contenant
+        # 3 éléments : la référence du carré et ses coordonnées de base
+        serp.append([carre, x, y])
+        x = x + cc                      # le carré suivant sera un peu plus à droite
+        i = i + 1
 
 def move():
     "Animation du serpent par récursivité"
@@ -72,6 +83,11 @@ def move():
     # Appel récursif de la fonction par elle-même (=> boucle d'animation)
     if flag > 0:
         fen.after(100, move)
+        if (can.bbox(balle)[0] in range(serp[len(serp) - 1][1], serp[len(serp) - 1][1] + 15) or can.bbox(balle)[2] in range(serp[len(serp) - 1][1], serp[len(serp) - 1][1] + 15)) and (can.bbox(balle)[1] in range(serp[len(serp) - 1][2], serp[len(serp) - 1][2] + 15) or can.bbox(balle)[3] in range(serp[len(serp) - 1][2], serp[len(serp) - 1][2] + 15)):
+            can.delete(balle)
+            new_ball()
+            serp.insert(0, [1, serp[0][1] - 15, serp[0][2] - 15])
+        
 
     # ===== Programme principal ================================================================================
 
@@ -80,17 +96,25 @@ flag = 0                            # commutateur pour l'animation
 dx, dy = 1, 0                       # indicateurs pour le sens de déplacement
 
 # Autres variables globales :
-canX, canY = 500, 500               # dimensions du canvas
-x, y, cc = 100, 100, 15             # coordonnées et coté du premier carré
+canX, canY = 500, 500                                                       # dimensions du canvas
+x, y, cc = 100, 100, 15                                                     # coordonnées et coté du premier carré
+ballX, ballY = randrange(0 + 20, canX - 20), randrange(0 + 20, canY - 20)   # coordonnées de la première balle
+
 
 # Création de l'espace de jeu :
 fen = Tk()
 can = Canvas(fen, bg='dark grey', height=canX, width=canY)
 can.pack(padx=10, pady=10)
 bou1 = Button(fen, text='Start', width=10, command=start_it)
-bou1.pack(side=LEFT)
+bou1.pack(side=LEFT, padx=10, pady=10)
 bou2 = Button(fen, text='Stop', width=10, command=stop_it)
-bou2.pack(side=LEFT)
+bou2.pack(side=LEFT, padx=10, pady=10)
+bou3 = Button(fen, text='Quitter', width=10, command=fen.quit)
+bou3.pack(side=RIGHT, padx=10, pady=10)
+
+# Réation de la balle à attraper
+balle = can.create_oval(ballX, ballY, ballX + cc, ballY + cc, fill='yellow')
+
 
 # Association des gestionnaires d'événements aux touches fléchées du clavier :
 fen.bind("<Left>", go_left)         # attention : les événements clavier
@@ -108,10 +132,9 @@ while i < 5:
     # Pour chaque carré, on mémorise une petite sous-liste contenant
     # 3 éléments : la référence du carré et ses coordonnées de base
     serp.append([carre, x, y])
-    x = x - cc                      # le carré suivant sera un peu plus à droite
+    x = x + cc                      # le carré suivant sera un peu plus à droite
     i = i + 1
-
-new_ball()
+""" serpent() """
 
 fen.mainloop()
     
