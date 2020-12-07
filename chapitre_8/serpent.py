@@ -15,6 +15,13 @@ def stop_it():
     global flag
     flag = 0
 
+def efface_serpent():
+    "Permet d'effacer le serpent, avant d'ajouter une case"
+    i = 0
+    while i < len(serp):
+        can.delete(serp[i][0])
+        i += 1
+
 def new_ball():
     "Apparation d'une nouvelle balle"
     global canX, canY, cc, can, ballX, ballY, flag, balle
@@ -23,39 +30,31 @@ def new_ball():
 
 def go_left(event =None):
     "Déplacement vers la gauche"
-    global dx, dy
+    global dx, dy, sens
     dx, dy = -1, 0
+    sens = 0
 
 def go_right(event =None):
     "Déplacement vers la droite"
-    global dx, dy
+    global dx, dy, sens
     dx, dy = 1, 0
+    sens = 2
 
 def go_up(event =None):
     "Déplacement vers le haut"
-    global dx, dy
+    global dx, dy, sens
     dx, dy = 0, -1
+    sens = 1
 
 def go_down(event =None):
     "Déplacement vers le bas"
-    global dx, dy
+    global dx, dy, sens
     dx, dy = 0, 1
-
-def serpent():
-    "Création du serpent"
-    global x, y, cc, serp
-    i = 0
-    while i < len(serp):
-        carre = can.create_rectangle(x, y, x + cc, y + cc, fill="green")
-        # Pour chaque carré, on mémorise une petite sous-liste contenant
-        # 3 éléments : la référence du carré et ses coordonnées de base
-        serp.append([carre, x, y])
-        x = x + cc                      # le carré suivant sera un peu plus à droite
-        i = i + 1
+    sens = 3
 
 def move():
     "Animation du serpent par récursivité"
-    global flag
+    global flag, serp, y, x
     # Principe du mouvement opéré : on déplace le carré de queue, dont les
     # caractéristiques sont mémorisées dans le premier élément de la liste
     # <serp>, de manière à l'amener en avant du carré de tête, dont les
@@ -80,13 +79,57 @@ def move():
     can.coords(cq, xq, yq, xq + cc, yq + cc)    # Déplacement effectif
     serp.append([cq, xq, yq])                   # Mémorisation du nouveau carré de tête
     del(serp[0])                                # effacement (retrait de la liste)
+
+    if (can.bbox(balle)[0] in range(serp[len(serp) - 1][1], serp[len(serp) - 1][1] + 15) or can.bbox(balle)[2] in range(serp[len(serp) - 1][1], serp[len(serp) - 1][1] + 15)) and (can.bbox(balle)[1] in range(serp[len(serp) - 1][2], serp[len(serp) - 1][2] + 15) or can.bbox(balle)[3] in range(serp[len(serp) - 1][2], serp[len(serp) - 1][2] + 15)):
+            can.delete(balle)
+            new_ball()
+            longueur = len(serp)
+            x = serp[0][1]
+            y = serp[0][2]
+            if sens == 0:
+                efface_serpent()
+                serp = []
+                i = 0
+                x = x + cc
+                while i < longueur + 1:
+                    carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
+                    serp.append([carre, x, y])
+                    x -= cc
+                    i += 1
+            elif sens == 2:
+                efface_serpent()
+                serp = []
+                i = 0
+                x = x - cc
+                while i < longueur + 1:
+                    carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
+                    serp.append([carre, x, y])
+                    x += cc
+                    i += 1
+            elif sens == 1:
+                efface_serpent()
+                serp = []
+                i = 0
+                y = y + cc
+                while i < longueur + 1:
+                    carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
+                    serp.append([carre, x, y])
+                    y -= cc
+                    i += 1
+            else:
+                efface_serpent()
+                serp = []
+                i = 0
+                y = y - cc
+                while i < longueur + 1:
+                    carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
+                    serp.append([carre, x, y])
+                    y += cc
+                    i += 1
+
     # Appel récursif de la fonction par elle-même (=> boucle d'animation)
     if flag > 0:
         fen.after(100, move)
-        if (can.bbox(balle)[0] in range(serp[len(serp) - 1][1], serp[len(serp) - 1][1] + 15) or can.bbox(balle)[2] in range(serp[len(serp) - 1][1], serp[len(serp) - 1][1] + 15)) and (can.bbox(balle)[1] in range(serp[len(serp) - 1][2], serp[len(serp) - 1][2] + 15) or can.bbox(balle)[3] in range(serp[len(serp) - 1][2], serp[len(serp) - 1][2] + 15)):
-            can.delete(balle)
-            new_ball()
-            serp.insert(0, [1, serp[0][1] - 15, serp[0][2] - 15])
         
 
     # ===== Programme principal ================================================================================
@@ -94,6 +137,7 @@ def move():
 # Variables globales modifiables par certaines fonctions :
 flag = 0                            # commutateur pour l'animation
 dx, dy = 1, 0                       # indicateurs pour le sens de déplacement
+sens = 2                            # variable qui détermine le sens de déplacement
 
 # Autres variables globales :
 canX, canY = 500, 500                                                       # dimensions du canvas
@@ -134,7 +178,6 @@ while i < 5:
     serp.append([carre, x, y])
     x = x + cc                      # le carré suivant sera un peu plus à droite
     i = i + 1
-""" serpent() """
 
 fen.mainloop()
     
