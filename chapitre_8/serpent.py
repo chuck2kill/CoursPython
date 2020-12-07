@@ -15,17 +15,10 @@ def stop_it():
     global flag
     flag = 0
 
-def efface_serpent():
-    "Permet d'effacer le serpent, avant d'ajouter une case"
-    i = 0
-    while i < len(serp):
-        can.delete(serp[i][0])
-        i += 1
-
 def new_ball():
     "Apparation d'une nouvelle balle"
     global canX, canY, cc, can, ballX, ballY, flag, balle
-    ballX, ballY = randrange(0, canX), randrange(0, canY)
+    ballX, ballY = randrange(0 + 20, canX - 20), randrange(0 + 20, canY - 20)
     balle = can.create_oval(ballX, ballY, ballX + cc, ballY + cc, fill='yellow')
 
 def go_left(event =None):
@@ -80,52 +73,38 @@ def move():
     serp.append([cq, xq, yq])                   # Mémorisation du nouveau carré de tête
     del(serp[0])                                # effacement (retrait de la liste)
 
+    # vérification que le serpent ne se coupe pas lui même
+    i = 0
+    while i < len(serp):
+        h = serp[i][1]
+        j = serp[i][2]
+        if serp[len(serp) - 1][1] in range(h, h + cc) and serp[len(serp) - 1][2] in range(j, j + cc):
+            flag = 0                # => arrêt de l'animation
+            can.create_text(canX / 2, 20, anchor=CENTER, text="Perdu !!!",
+                        fill="red", font="Arial 14 bold")
+
+    # Gestion de la collision avec la balle
     if (can.bbox(balle)[0] in range(serp[len(serp) - 1][1], serp[len(serp) - 1][1] + 15) or can.bbox(balle)[2] in range(serp[len(serp) - 1][1], serp[len(serp) - 1][1] + 15)) and (can.bbox(balle)[1] in range(serp[len(serp) - 1][2], serp[len(serp) - 1][2] + 15) or can.bbox(balle)[3] in range(serp[len(serp) - 1][2], serp[len(serp) - 1][2] + 15)):
-            can.delete(balle)
-            new_ball()
-            longueur = len(serp)
-            x = serp[0][1]
+            can.delete(balle)                   # suppression de l'ancienne balle
+            new_ball()                          # création d'une nouvelle balle
+            x = serp[0][1]                      # on stocke les infos du dernier carré du serpent
             y = serp[0][2]
-            if sens == 0:
-                efface_serpent()
-                serp = []
-                i = 0
+            if sens == 0:                       # si se déplace vers la gauche
                 x = x + cc
-                while i < longueur + 1:
-                    carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
-                    serp.append([carre, x, y])
-                    x -= cc
-                    i += 1
-            elif sens == 2:
-                efface_serpent()
-                serp = []
-                i = 0
+                carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
+                serp.insert(0, [carre, x, y])
+            elif sens == 2:                     # si se déplace vers la droite
                 x = x - cc
-                while i < longueur + 1:
-                    carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
-                    serp.append([carre, x, y])
-                    x += cc
-                    i += 1
-            elif sens == 1:
-                efface_serpent()
-                serp = []
-                i = 0
+                carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
+                serp.insert(0, [carre, x, y])
+            elif sens == 1:                     # si se déplace vers le haut
                 y = y + cc
-                while i < longueur + 1:
-                    carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
-                    serp.append([carre, x, y])
-                    y -= cc
-                    i += 1
-            else:
-                efface_serpent()
-                serp = []
-                i = 0
+                carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
+                serp.insert(0, [carre, x, y])
+            else:                               # si se déplace vers le bas
                 y = y - cc
-                while i < longueur + 1:
-                    carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
-                    serp.append([carre, x, y])
-                    y += cc
-                    i += 1
+                carre = can.create_rectangle(x , y, x + cc, y + cc, fill="green")
+                serp.insert(0, [carre, x, y])
 
     # Appel récursif de la fonction par elle-même (=> boucle d'animation)
     if flag > 0:
